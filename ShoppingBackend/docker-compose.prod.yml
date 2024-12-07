@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: ./compose/production/django/Dockerfile
+    image: shopping-trening_web_prod
+    command: /start
+    volumes:
+      - .:/app
+      - /var/www/shopping/static:/app/static
+      - /var/www/shopping/media:/app/media
+    ports:
+      - 8010:8000
+    env_file:
+      - ./env/.production
+    depends_on:
+      - db
+  db:
+    image: postgres:14
+
+    volumes:
+      - shopping_data_production:/var/lib/postgresql/data/
+    env_file:
+      - ./env/.production
+
+
+volumes:
+  shopping_data_production:
+#  static_volume:
+#  media_volume:
